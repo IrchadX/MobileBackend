@@ -1,0 +1,130 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "type": "environment"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [3.1745, 36.7048],
+              [3.1747, 36.7048],
+              [3.1747, 36.7046],
+              [3.1745, 36.7046],
+              [3.1745, 36.7048]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "type": "zone",
+          "name": "Meeting Room",
+          "description": "A room for meetings."
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [3.1745, 36.7048],
+              [3.1747, 36.7048],
+              [3.1747, 36.7046],
+              [3.1745, 36.7046],
+              [3.1745, 36.7048]
+            ]
+          ]
+        }
+      },
+  
+      {
+        "type": "Feature",
+        "properties": {
+          "type": "poi",
+          "name": "Table",
+          "description": "A large conference table (INSIDE)."
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [3.17455, 36.70475],
+              [3.17465, 36.70475],
+              [3.17465, 36.7047],
+              [3.17455, 36.7047],
+              [3.17455, 36.70475]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "type": "poi",
+          "name": "Screen",
+          "description": "Wall-mounted projector screen (INSIDE)."
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              [3.1746, 36.70478],
+              [3.1746, 36.70478],
+              [3.1746, 36.70478],
+              [3.17468, 36.70478]
+            ]
+          ]
+        }
+      },
+  
+      {
+        "type": "Feature",
+        "properties": {
+          "type": "poi",
+          "name": "Hallway Bench",
+          "description": "Seating area outside the meeting room (OUTSIDE)."
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [3.1748, 36.70485],
+              [3.1749, 36.70485],
+              [3.1749, 36.7048],
+              [3.1748, 36.7048],
+              [3.1748, 36.70485]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "type": "poi",
+          "name": "Exit Path",
+          "description": "A pathway leading to the exit (OUTSIDE)."
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              [3.1743, 36.70455],
+              [3.1742, 36.7045]
+            ]
+          ]
+        }
+      }
+    ],
+    "properties": {
+      "environment": {
+        "name": "ENVIRONMENT",
+        "isPublic": true,
+        "userId": 1,
+        "address": "address"
+      }
+    }
+  }
+  

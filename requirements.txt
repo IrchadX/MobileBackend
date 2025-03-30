@@ -1,0 +1,4 @@
+npm install
+npm list @nestjs/common
+npm install @turf/turf @nestjs/microservices mqtt
+
