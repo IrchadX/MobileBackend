@@ -26,12 +26,10 @@ export class AuthService {
       },
     });
 
-    // If user doesn't exist or password doesn't match
     if (!user || !user.password) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Compare passwords
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
@@ -41,15 +39,19 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Generate JWT token
     const payload = {
       sub: user.id,
       email: user.email,
       userType: user.userType?.type,
     };
 
+    const token = this.jwtService.sign(payload);
+
+
+    console.log(`User ${user.email} logged in successfully.`);
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: token,
       user: {
         id: user.id,
         firstName: user.first_name,
@@ -59,5 +61,20 @@ export class AuthService {
         userType: user.userType?.type,
       },
     };
+  }
+
+  async validateToken(token: string) {
+    try {
+      const decoded = await this.jwtService.verifyAsync(token);
+      console.log('✅ Token valid for user:', decoded);
+
+      return {
+        valid: true,
+        user: decoded,
+      };
+    } catch (error) {
+      console.error('❌ Token validation failed:', error.message);
+      throw new UnauthorizedException('Invalid or expired token');
+    }
   }
 }
