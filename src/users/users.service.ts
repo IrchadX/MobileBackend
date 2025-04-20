@@ -13,17 +13,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateAidantDto } from './dto/create-aidant.dto';
 import * as bcrypt from 'bcrypt';
 
-function generateRandomIdentifier(length = 10): string {
-  const chars =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  return Array.from(
-    { length },
-    () => chars[Math.floor(Math.random() * chars.length)],
-  ).join('');
-}
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -277,33 +268,5 @@ export class UsersService {
       }
       throw new InternalServerErrorException('Failed to fetch user');
     }
-  }
-
-  async signupAidant(dto: CreateAidantDto) {
-    const { first_name, family_name, email, password, confirmPassword } = dto;
-
-    if (password !== confirmPassword) {
-      throw new BadRequestException('Passwords do not match');
-    }
-
-    const existing = await this.prisma.user.findUnique({ where: { email } });
-    if (existing) {
-      throw new BadRequestException('Email already exists');
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const aidant = await this.prisma.user.create({
-      data: {
-        first_name,
-        family_name,
-        email,
-        password: hashedPassword,
-        userTypeId: 5,
-        Identifier: generateRandomIdentifier(),
-      },
-    });
-
-    return { message: 'Aidant user created', userId: aidant.id };
   }
 }

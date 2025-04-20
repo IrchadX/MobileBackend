@@ -5,6 +5,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
+
 import * as bcrypt from 'bcrypt';
 
 describe('UsersService', () => {
@@ -115,7 +116,7 @@ describe('UsersService', () => {
             first_name: user.first_name,
             family_name: user.family_name,
             email: user.email,
-            birthDate: user.birth_date.toISOString().split('T')[0], // Ensure correct formatting
+            birthDate: user.birth_date.toISOString().split('T')[0],
           }),
         ),
       ),
