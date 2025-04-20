@@ -3,7 +3,7 @@ import {
   Injectable,
   //InternalServerErrorException,
   BadRequestException,
-  //NotFoundException,
+  NotFoundException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -53,11 +53,10 @@ export class AidantService {
 
   async pairWithAidant(dto: PairAidantDto) {
     try {
-      console.log('Received DTO:', dto); // Log DTO for debugging
+      console.log('Received DTO:', dto);
 
       const { user_id, aidant_identifier } = dto;
 
-      // Fetch the aidant (helper) by identifier
       const aidant = await this.prisma.user.findFirst({
         where: {
           Identifier: aidant_identifier,
@@ -68,7 +67,6 @@ export class AidantService {
         throw new Error('Aidant not found');
       }
 
-      // Check if the user has already paired with a helper (cannot pair with multiple helpers)
       const existingPairing = await this.prisma.helper_user.findFirst({
         where: {
           user_id: user_id,
@@ -82,7 +80,6 @@ export class AidantService {
         );
       }
 
-      // Create the helper_user entry linking the user and the aidant (helper)
       await this.prisma.helper_user.create({
         data: {
           user_id: user_id,
@@ -93,8 +90,66 @@ export class AidantService {
 
       return { message: 'Pairing request sent successfully' };
     } catch (error) {
-      console.error('Error in pairWithAidant:', error); // Log the full error
+      console.error('Error in pairWithAidant:', error);
       throw new Error('An error occurred while processing the pairing request');
     }
+  }
+
+  async acceptPairingRequest(id: number) {
+    const pairing = await this.prisma.helper_user.findUnique({ where: { id } });
+
+    if (!pairing) {
+      throw new NotFoundException('Pairing request not found');
+    }
+
+    const updated = await this.prisma.helper_user.update({
+      where: { id },
+      data: { state: 'Accepted' },
+    });
+
+    return {
+      message: 'Pairing request accepted',
+      data: updated,
+    };
+  }
+
+  async declinePairingRequest(id: number) {
+    const pairing = await this.prisma.helper_user.findUnique({ where: { id } });
+
+    if (!pairing) {
+      throw new NotFoundException('Pairing request not found');
+    }
+
+    const updated = await this.prisma.helper_user.update({
+      where: { id },
+      data: { state: 'Declined' },
+    });
+
+    return {
+      message: 'Pairing request declined',
+      data: updated,
+    };
+  }
+  async getPendingRequestsForHelper(helperIdParam: string) {
+    const helper_id = parseInt(helperIdParam);
+
+    if (isNaN(helper_id)) {
+      throw new BadRequestException('Helper ID must be a valid number');
+    }
+
+    const pendingRequests = await this.prisma.helper_user.findMany({
+      where: {
+        helper_id,
+        state: 'Pending',
+      },
+      include: {
+        user_helper_user_user_idTouser: true,
+      },
+    });
+
+    return {
+      message: 'Pending requests retrieved successfully',
+      data: pendingRequests,
+    };
   }
 }
