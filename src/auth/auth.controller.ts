@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 // src/auth/auth.controller.ts
 import {
@@ -6,7 +7,7 @@ import {
   Post,
   Get,
   Headers,
-  UnauthorizedException,
+  // UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -24,11 +25,18 @@ export class AuthController {
 
   @Get('validate')
   async validateToken(@Headers('authorization') authHeader: string) {
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('No token provided');
+    try {
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return {
+          valid: false,
+          error: 'No token provided',
+        };
+      }
+      const token = authHeader.split(' ')[1];
+      return this.authService.validateToken(token);
+    } catch (error) {
+      console.error('❌ Token validation failed:', error.message);
+      return { valid: false, error: 'Invalid or expired token' };
     }
-
-    const token = authHeader.split(' ')[1];
-    return this.authService.validateToken(token);
   }
 }

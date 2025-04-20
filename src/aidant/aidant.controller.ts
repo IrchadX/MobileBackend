@@ -38,4 +38,9 @@ export class AidantController {
   getPendingRequests(@Param('helper_id') helper_id: string) {
     return this.aidantService.getPendingRequestsForHelper(helper_id);
   }
+
+  @Get('UsersForHelper/:helper_id')
+  getUsers(@Param('helper_id') helper_id: string) {
+    return this.aidantService.getUsersForHelper(helper_id);
+  }
 }

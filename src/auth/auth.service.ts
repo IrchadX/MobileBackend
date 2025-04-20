@@ -47,11 +47,10 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-
     console.log(`User ${user.email} logged in successfully.`);
 
     return {
-      access_token: token,
+      token: token,
       user: {
         id: user.id,
         firstName: user.first_name,
@@ -67,14 +66,16 @@ export class AuthService {
     try {
       const decoded = await this.jwtService.verifyAsync(token);
       console.log('✅ Token valid for user:', decoded);
-
       return {
         valid: true,
-        user: decoded,
+        user: decoded, // Return the entire decoded object like in Express
       };
     } catch (error) {
       console.error('❌ Token validation failed:', error.message);
-      throw new UnauthorizedException('Invalid or expired token');
+      return {
+        valid: false,
+        error: 'Invalid or expired token',
+      };
     }
   }
 }

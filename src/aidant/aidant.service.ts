@@ -152,4 +152,27 @@ export class AidantService {
       data: pendingRequests,
     };
   }
+
+  async getUsersForHelper(helperIdParam: string) {
+    const helper_id = parseInt(helperIdParam);
+
+    if (isNaN(helper_id)) {
+      throw new BadRequestException('Helper ID must be a valid number');
+    }
+
+    const pendingRequests = await this.prisma.helper_user.findMany({
+      where: {
+        helper_id,
+        state: 'Accepted',
+      },
+      include: {
+        user_helper_user_user_idTouser: true,
+      },
+    });
+
+    return {
+      message: 'Users retrieved successfully',
+      data: pendingRequests,
+    };
+  }
 }

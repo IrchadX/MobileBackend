@@ -242,6 +242,8 @@ export class UsersService {
   // User by ID fetching endpoint
   async findOne(id: number) {
     try {
+      console.log(`Fetching user with ID: ${id}`); // Log the ID being fetched
+
       const user = await this.prisma.user.findUnique({
         where: { id },
         include: {
@@ -249,12 +251,26 @@ export class UsersService {
         },
       });
 
+      // Log the user data if found
+      if (user) {
+        console.log(`User found:`, user); // Log the full user object
+      } else {
+        console.log(`User with ID ${id} not found`); // Log when no user is found
+      }
+
       if (!user) {
         throw new NotFoundException(`User with ID ${id} not found`);
       }
 
       // Destructure and format response
       const { password, birth_date, userType, ...result } = user;
+
+      // Log the formatted result
+      console.log(`Formatted user data:`, {
+        ...result,
+        userTypeName: userType?.type ?? null,
+        birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null,
+      });
 
       return {
         ...result,
