@@ -6,13 +6,24 @@
 import {
   Injectable,
   InternalServerErrorException,
+  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateAidantDto } from './dto/create-aidant.dto';
 import * as bcrypt from 'bcrypt';
 
+function generateRandomIdentifier(length = 10): string {
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from(
+    { length },
+    () => chars[Math.floor(Math.random() * chars.length)],
+  ).join('');
+}
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -178,64 +189,64 @@ export class UsersService {
   // }
 
   // User update endpoint
-  // async update(id: number, updateUserDto: UpdateUserDto) {
-  //   try {
-  //     const existingUser = await this.prisma.user.findUnique({ where: { id } });
-  //     if (!existingUser) {
-  //       throw new NotFoundException(`User with ID ${id} not found`);
-  //     }
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    try {
+      const existingUser = await this.prisma.user.findUnique({ where: { id } });
+      if (!existingUser) {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
 
-  //     console.log('Update Data:', updateUserDto);
+      console.log('Update Data:', updateUserDto);
 
-  //     const updatedUser = await this.prisma.user.update({
-  //       where: { id },
-  //       data: {
-  //         first_name: updateUserDto.firstName ?? existingUser.first_name,
-  //         family_name: updateUserDto.familyName ?? existingUser.family_name,
-  //         email: updateUserDto.email ?? existingUser.email,
-  //         phone_number: updateUserDto.phoneNumber ?? existingUser.phone_number,
-  //         birth_date: updateUserDto.birthDate ?? existingUser.birth_date,
-  //         sex: updateUserDto.sex ?? existingUser.sex,
-  //         city: updateUserDto.city ?? existingUser.city,
-  //         street: updateUserDto.street ?? existingUser.street,
-  //         userTypeId: updateUserDto.userTypeId ?? existingUser.userTypeId,
-  //       },
-  //     });
+      const updatedUser = await this.prisma.user.update({
+        where: { id },
+        data: {
+          first_name: updateUserDto.firstName ?? existingUser.first_name,
+          family_name: updateUserDto.familyName ?? existingUser.family_name,
+          email: updateUserDto.email ?? existingUser.email,
+          phone_number: updateUserDto.phoneNumber ?? existingUser.phone_number,
+          birth_date: updateUserDto.birthDate ?? existingUser.birth_date,
+          sex: updateUserDto.sex ?? existingUser.sex,
+          city: updateUserDto.city ?? existingUser.city,
+          street: updateUserDto.street ?? existingUser.street,
+          userTypeId: updateUserDto.userTypeId ?? existingUser.userTypeId,
+        },
+      });
 
-  //     console.log('Updated User:', updatedUser);
+      console.log('Updated User:', updatedUser);
 
-  //     const { password, birth_date, ...result } = updatedUser;
-  //     return {
-  //       ...result,
-  //       birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null,
-  //     };
-  //   } catch (error) {
-  //     console.error('Error updating user:', error);
-  //     throw new InternalServerErrorException(
-  //       'Failed to update user: ' + error.message,
-  //     );
-  //   }
-  // }
+      const { password, birth_date, ...result } = updatedUser;
+      return {
+        ...result,
+        birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null,
+      };
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Failed to update user: ' + error.message,
+      );
+    }
+  }
 
   // User deletion endpoint
-  // async remove(id: number) {
-  //   try {
-  //     const user = await this.prisma.user.findUnique({ where: { id } });
+  async remove(id: number) {
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id } });
 
-  //     if (!user) {
-  //       throw new NotFoundException(`User with ID ${id} not found`);
-  //     }
+      if (!user) {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
 
-  //     await this.prisma.user.delete({ where: { id } });
+      await this.prisma.user.delete({ where: { id } });
 
-  //     return { message: `User with ID ${id} successfully deleted` };
-  //   } catch (error) {
-  //     console.error('Error deleting user:', error);
-  //     throw new InternalServerErrorException(
-  //       'Failed to delete user: ' + error.message,
-  //     );
-  //   }
-  // }
+      return { message: `User with ID ${id} successfully deleted` };
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      throw new InternalServerErrorException(
+        'Failed to delete user: ' + error.message,
+      );
+    }
+  }
 
   // User by ID fetching endpoint
   async findOne(id: number) {
@@ -256,8 +267,8 @@ export class UsersService {
 
       return {
         ...result,
-        userTypeName: userType?.type ?? null, // Get the actual name from the user_type table
-        birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null, // Convert birth_date to YYYY-MM-DD
+        userTypeName: userType?.type ?? null,
+        birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null,
       };
     } catch (error) {
       console.error(`Error fetching user with ID ${id}:`, error);
@@ -266,5 +277,33 @@ export class UsersService {
       }
       throw new InternalServerErrorException('Failed to fetch user');
     }
+  }
+
+  async signupAidant(dto: CreateAidantDto) {
+    const { first_name, family_name, email, password, confirmPassword } = dto;
+
+    if (password !== confirmPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    const existing = await this.prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const aidant = await this.prisma.user.create({
+      data: {
+        first_name,
+        family_name,
+        email,
+        password: hashedPassword,
+        userTypeId: 5,
+        Identifier: generateRandomIdentifier(),
+      },
+    });
+
+    return { message: 'Aidant user created', userId: aidant.id };
   }
 }

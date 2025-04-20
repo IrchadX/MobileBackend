@@ -1,4 +1,5 @@
 import {
+  Body,
   //Body,
   Controller,
   // Post,
@@ -7,9 +8,11 @@ import {
   Param,
   //Delete,
   ParseIntPipe,
+  Post,
   //Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateAidantDto } from './dto/create-aidant.dto';
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -52,6 +55,10 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @Post('signup/aidant')
+  async signupAidant(@Body() dto: CreateAidantDto) {
+    return this.usersService.signupAidant(dto);
+  }
   // @Patch(':id')
   // async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
   //   return this.usersService.update(Number(id), updateUserDto);
