@@ -22,7 +22,6 @@ describe('AppelService (Integration Test)', () => {
   });
 
   it('should return the correct phone number from the database', async () => {
-    // Assuming your user has an ID '66' and the correct phone number is in the database
     const phoneNumber = await service.getUserPhoneNumber('66');
 
     expect(phoneNumber).toBeDefined();
