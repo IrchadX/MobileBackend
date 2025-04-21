@@ -108,13 +108,13 @@ export class UsersService {
       // Log the formatted result
       console.log(`Formatted user data:`, {
         ...result,
-        userTypeName: userType?.type ?? null,
+        userType: userType?.type ?? null,
         birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null,
       });
 
       return {
         ...result,
-        userTypeName: userType?.type ?? null,
+        userType: userType?.type ?? null,
         birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null,
       };
     } catch (error) {
