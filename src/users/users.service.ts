@@ -14,6 +14,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { ChangePasswordDto } from './dto/ChangePasswordDto ';
 
 @Injectable()
 export class UsersService {
@@ -124,5 +125,35 @@ export class UsersService {
       }
       throw new InternalServerErrorException('Failed to fetch user');
     }
+  }
+
+  async changePassword(dto: ChangePasswordDto) {
+    console.log('DTO:', dto);
+
+    const { userId, currentPassword, newPassword, confirmNewPassword } = dto;
+
+    if (newPassword !== confirmNewPassword) {
+      throw new BadRequestException('New passwords do not match');
+    }
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+
+    if (!user || !user.password) {
+      throw new BadRequestException('Invalid user or missing password');
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isMatch)
+      throw new BadRequestException('Current password is incorrect');
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashed },
+    });
+
+    return { message: 'Password updated successfully' };
   }
 }
