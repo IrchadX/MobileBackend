@@ -20,8 +20,8 @@ model user {
   sex                                     String?                @db.VarChar
   street                                  String?                @db.VarChar
   city                                    String?                @db.VarChar
-  Identifier                              String?                @db.VarChar
   birth_date                              DateTime?
+  Identifier                              String?                @db.VarChar
   device                                  device[]
   env_user                                env_user[]
   helper_user_helper_user_helper_idTouser helper_user[]          @relation("helper_user_helper_idTouser")
@@ -178,6 +178,7 @@ model zone {
   poi_zone    poi_zone[]
   environment environment? @relation(fields: [env_id], references: [id], onDelete: Cascade)
   map         map?         @relation(fields: [map_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  zone_type   zone_type?   @relation(fields: [type_id], references: [id])
 }
 
 model helper_user {
@@ -225,6 +226,16 @@ model pricing {
   id        Int     @id @default(autoincrement())
   attribute String? @unique @db.VarChar
   price     Float?  @db.Real
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model zone_type {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  type       String?
+  color      String?
+  icon       String?
+  zone       zone[]
 }
 
 enum intervention_type {

@@ -7,17 +7,22 @@ import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AidantModule } from './aidant/aidant.module';
+import { DeviceModule } from './Functions/Device/device.module';
+import { ProfilModule } from './Functions/Profil/profil.module';
+import { AppelModule } from './Functions/appel/appel.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // This makes ConfigModule available globally
+      isGlobal: true,
     }),
     PrismaModule,
     UsersModule,
     AuthModule,
     AidantModule,
-    AidantModule,
+    AppelModule,
+    ProfilModule,
+    DeviceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
