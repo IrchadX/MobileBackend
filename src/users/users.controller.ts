@@ -15,6 +15,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ChangePasswordDto } from './dto/ChangePasswordDto ';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -28,5 +29,10 @@ export class UsersController {
   @Patch('change-password')
   changePassword(@Body() dto: ChangePasswordDto) {
     return this.usersService.changePassword(dto);
+  }
+
+  @Patch(':id')
+  updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(id, updateUserDto);
   }
 }

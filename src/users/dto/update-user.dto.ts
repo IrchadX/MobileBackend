@@ -1,5 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto';
+// src/users/dto/update-user.dto.ts
+import { IsOptional, IsString, IsEmail } from 'class-validator';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  first_name?: string;
+
+  @IsOptional()
+  @IsString()
+  family_name?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  phone_number?: string;
+}

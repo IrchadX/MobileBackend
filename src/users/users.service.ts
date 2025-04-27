@@ -20,46 +20,6 @@ import { ChangePasswordDto } from './dto/ChangePasswordDto ';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  // User update endpoint
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    try {
-      const existingUser = await this.prisma.user.findUnique({ where: { id } });
-      if (!existingUser) {
-        throw new NotFoundException(`User with ID ${id} not found`);
-      }
-
-      console.log('Update Data:', updateUserDto);
-
-      const updatedUser = await this.prisma.user.update({
-        where: { id },
-        data: {
-          first_name: updateUserDto.firstName ?? existingUser.first_name,
-          family_name: updateUserDto.familyName ?? existingUser.family_name,
-          email: updateUserDto.email ?? existingUser.email,
-          phone_number: updateUserDto.phoneNumber ?? existingUser.phone_number,
-          birth_date: updateUserDto.birthDate ?? existingUser.birth_date,
-          sex: updateUserDto.sex ?? existingUser.sex,
-          city: updateUserDto.city ?? existingUser.city,
-          street: updateUserDto.street ?? existingUser.street,
-          userTypeId: updateUserDto.userTypeId ?? existingUser.userTypeId,
-        },
-      });
-
-      console.log('Updated User:', updatedUser);
-
-      const { password, birth_date, ...result } = updatedUser;
-      return {
-        ...result,
-        birthDate: birth_date ? birth_date.toISOString().split('T')[0] : null,
-      };
-    } catch (error) {
-      console.error('Error updating user:', error);
-      throw new InternalServerErrorException(
-        'Failed to update user: ' + error.message,
-      );
-    }
-  }
-
   // User deletion endpoint
   async remove(id: number) {
     try {
@@ -155,5 +115,12 @@ export class UsersService {
     });
 
     return { message: 'Password updated successfully' };
+  }
+
+  async updateUser(id: number, data: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
   }
 }
