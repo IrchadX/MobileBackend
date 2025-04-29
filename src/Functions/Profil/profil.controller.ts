@@ -20,10 +20,10 @@ export class UpdateUserDto {
   @IsString()
   id: string;
   @IsString()
-  first: string;
+  firstName: string;
   
   @IsString()
-  last: string;
+  lastName: string;
 }
 export class UpdateUserpwd {
   @IsString()
@@ -44,9 +44,12 @@ export class ProfilController {
 async changeDataUser(
   @Body() updateUserDto: UpdateUserDto
 ) {
-  const {id, first, last } = updateUserDto;
+  const id = updateUserDto.id;
+  const first = updateUserDto.firstName; 
+  const last = updateUserDto.lastName;
+  
   const message = await this.exampleService.changeUserData(id, first, last);
-  return message;
+  return {data: message};
 }
 @Post('api/changePassword') 
 async changePasswordUser(

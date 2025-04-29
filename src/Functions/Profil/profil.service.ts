@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
  
  
 /* eslint-disable prettier/prettier */
@@ -18,12 +20,16 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import * as bcrypt from 'bcrypt'; 
 
 type ProfilData = {
   fullName: string;
 };
 type ProfilError= {
   error: string;
+};
+type Response={
+  data: string;
 };
 @Injectable()
 export class ProfilService {
@@ -57,9 +63,11 @@ export class ProfilService {
   // Function to Change User informations
   async changeUserData(userId: string, first: string, last: string): Promise<string | null> {
     try {
+      console.log(first)
       if (!/^\d+$/.test(userId)) {
         return 'Invalid ID format';
       }
+  
       const updatedUser = await this.prisma.user.update({
         where: {
           id: parseInt(userId, 10), 
@@ -68,10 +76,24 @@ export class ProfilService {
           first_name: first,
           family_name: last,
         },
+        select: { 
+          id: true,
+          first_name: true,
+          family_name: true
+      }
       });
+      console.log('Updated user:', updatedUser);
+    // Verify update
+    const verifiedUser = await this.prisma.user.findUnique({
+        where: { id: parseInt(userId, 10),  }
+    });
+
+    if (verifiedUser?.first_name !== first || verifiedUser?.family_name !== last) {
+        throw new Error('Update verification failed');
+    }
   
       // Return a message confirming the update
-      return `User data for ${updatedUser.first_name} ${updatedUser.family_name} has been successfully updated.`;
+      return `Opération Réussie.`;
     } catch (error) {
       console.error('Error updating user data:', error);
       return null; 
@@ -80,31 +102,39 @@ export class ProfilService {
   // Function to Change User password
   async changeUserPassword(userId: string, pwd: string): Promise<string | null> {
     try {
+      // Validate user ID
       if (!/^\d+$/.test(userId)) {
         return 'Invalid ID format';
       }
-       await this.prisma.user.update({
+  
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(pwd, 10); // 10 is the saltRounds for bcrypt
+  
+      // Update user with hashed password
+      await this.prisma.user.update({
         where: {
-          id: parseInt(userId, 10), 
+          id: parseInt(userId, 10), // User ID should be an integer
         },
         data: {
-          password: pwd,
+          password: hashedPassword, // Save the hashed password
         },
       });
   
-      // Return a message confirming the update
-      return `Password has been successfully updated.`;
+      // Return a success message
+      return "Opération Réussie";
     } catch (error) {
       console.error('Error updating user password:', error);
       return null; 
     }
   }
   // Function to Check the User password
-  async checkUserPassword(userId: string, pwd: string): Promise< null| string> {
+
+  async checkUserPassword(userId: string, pwd: string): Promise<Response | null> {
     try {
       if (!/^\d+$/.test(userId)) {
-        return 'Invalid ID format';
+        return { data: 'Invalid ID format' };
       }
+  
       const user = await this.prisma.user.findUnique({
         where: {
           id: parseInt(userId, 10),
@@ -112,14 +142,25 @@ export class ProfilService {
       });
   
       if (!user) {
-        return 'User not found';
+        return { data: 'User not found' };
       }
-      if(user.password === pwd) {return "true"}
-      else{ return "false"}
+      if (user.password) {
+        const passwordMatch = await bcrypt.compare(pwd, user.password); 
+  
+        if (passwordMatch) {
+          return { data: 'true' };
+        } else {
+          return { data: 'Mot de passe incorrect!' };
+        }
+      }else{
+        return { data: 'User does not have password' };
+      }
+     
     } catch (error) {
       console.error('Error checking user password:', error);
       return null;
     }
   }
+  
   
 }

@@ -20,7 +20,7 @@ export class AppelController {
   async getData(@Param('id') userId: string) {
     const tel = await this.exampleService.getUserPhoneNumber(userId);
     return { 
-        phone: tel,
+        data: tel,
       };
   }
   @Get('api/emergencyappel/')
