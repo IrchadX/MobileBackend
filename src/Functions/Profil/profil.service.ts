@@ -124,7 +124,7 @@ export class ProfilService {
       return "Opération Réussie";
     } catch (error) {
       console.error('Error updating user password:', error);
-      return null; 
+      return "Erreur Réseau , veuillez reessayer plus tard"; 
     }
   }
   // Function to Check the User password
@@ -158,7 +158,7 @@ export class ProfilService {
      
     } catch (error) {
       console.error('Error checking user password:', error);
-      return null;
+      return { data: 'Erreur Réseau' };
     }
   }
   

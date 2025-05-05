@@ -65,7 +65,7 @@ export class AidantService {
       });
 
       if (!aidant) {
-        throw new Error('Aidant not found');
+        throw new Error('Aidant non existant!  Veuillez vérifier le code entré');
       }
 
       const existingPairing = await this.prisma.helper_user.findFirst({
@@ -76,9 +76,7 @@ export class AidantService {
       });
 
       if (existingPairing) {
-        throw new Error(
-          'User has already sent a pairing request to another helper',
-        );
+        return { message: 'Vous avez déja un aidant' };
       }
 
       await this.prisma.helper_user.create({
@@ -89,10 +87,10 @@ export class AidantService {
         },
       });
 
-      return { message: 'Pairing request sent successfully' };
+      return { message: 'Pairing réussi' };
     } catch (error) {
       console.error('Error in pairWithAidant:', error);
-      throw new Error('An error occurred while processing the pairing request');
+      return { message: 'Erreur Serveur, Veuilez réessayer!' };
     }
   }
 
