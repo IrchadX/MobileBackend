@@ -50,7 +50,7 @@ export class AuthService {
         email: loginDto.email,
       },
       include: {
-        user_type: true,
+        userType: true,
       },
     });
 
