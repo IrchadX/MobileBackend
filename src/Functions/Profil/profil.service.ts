@@ -93,7 +93,7 @@ export class ProfilService {
     }
   
       // Return a message confirming the update
-      return `Opération Réussie.`;
+      return `Opération Réussie`;
     } catch (error) {
       console.error('Error updating user data:', error);
       return null; 
@@ -121,7 +121,7 @@ export class ProfilService {
       });
   
       // Return a success message
-      return "Opération Réussie";
+      return  `Opération Réussie`;
     } catch (error) {
       console.error('Error updating user password:', error);
       return "Erreur Réseau , veuillez reessayer plus tard"; 
@@ -129,10 +129,10 @@ export class ProfilService {
   }
   // Function to Check the User password
 
-  async checkUserPassword(userId: string, pwd: string): Promise<Response | null> {
+  async checkUserPassword(userId: string, pwd: string): Promise<string| null> {
     try {
       if (!/^\d+$/.test(userId)) {
-        return { data: 'Invalid ID format' };
+        return 'Invalid ID format' ;
       }
   
       const user = await this.prisma.user.findUnique({
@@ -142,23 +142,23 @@ export class ProfilService {
       });
   
       if (!user) {
-        return { data: 'User not found' };
+        return 'User not found' ;
       }
       if (user.password) {
         const passwordMatch = await bcrypt.compare(pwd, user.password); 
   
         if (passwordMatch) {
-          return { data: 'true' };
+          return  'true' ;
         } else {
-          return { data: 'Mot de passe incorrect!' };
+          return 'Mot de passe incorrect!' ;
         }
       }else{
-        return { data: 'User does not have password' };
+        return 'User does not have password' ;
       }
      
     } catch (error) {
       console.error('Error checking user password:', error);
-      return { data: 'Erreur Réseau' };
+      return 'Erreur Réseau' ;
     }
   }
   

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 // src/auth/auth.controller.ts
@@ -11,11 +14,16 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+   @Post('signup')
+    async signupUser(@Body() dto: CreateUserDto) {
+      return this.authService.signupUser(dto);
+    }
   @Post('')
   // eslint-disable-next-line @typescript-eslint/require-await
   async login(@Body() loginDto: LoginDto) {

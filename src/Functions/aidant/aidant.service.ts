@@ -44,7 +44,7 @@ export class AidantService {
         family_name,
         email,
         password: hashedPassword,
-        userTypeId: 5,
+        userTypeId: 16,
         Identifier: generateRandomIdentifier(),
       },
     });

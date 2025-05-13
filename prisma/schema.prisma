@@ -206,6 +206,7 @@ model user {
   purchase_history                        purchase_history[]
   user_type                               user_type?             @relation(fields: [userTypeId], references: [id], onDelete: Cascade)
   Identifier                              String?                @db.VarChar
+   localisations localisation[]
 }
 
 model user_type {
@@ -229,6 +230,15 @@ model zone {
   poi_zone    poi_zone[]
   environment environment? @relation(fields: [env_id], references: [id], onDelete: Cascade)
   map         map?         @relation(fields: [map_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+model localisation {
+  id        Int    @id @default(autoincrement())
+  longitude String
+  latitude  String
+  userId    Int    @unique
+  user      user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("localisation")
 }
 
 enum intervention_type {

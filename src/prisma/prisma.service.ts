@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+ 
+ 
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable prettier/prettier */
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
@@ -9,6 +9,8 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  [x: string]: any;
+
   async onModuleInit() {
     await this.$connect();
   }

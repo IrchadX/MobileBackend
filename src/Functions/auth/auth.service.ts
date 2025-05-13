@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // src/auth/auth.service.ts
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,33 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+   async signupUser(dto: CreateUserDto) {
+      const { first_name, family_name, email, password, confirmPassword } = dto;
+  
+      if (password !== confirmPassword) {
+        throw new BadRequestException('Passwords do not match');
+      }
+  
+      const existing = await this.prisma.user.findUnique({ where: { email } });
+      if (existing) {
+        throw new BadRequestException('Email already exists');
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      const user = await this.prisma.user.create({
+        data: {
+          first_name,
+          family_name,
+          email,
+          password: hashedPassword,
+          userTypeId: 14,
+        },
+      });
+  
+      return { message: ' user created', userId: user.id };
+    }
+  
   async login(loginDto: LoginDto) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -51,6 +79,7 @@ export class AuthService {
 
     return {
       token: token,
+      message: 'Authentification réussie',
       user: {
         id: user.id,
         firstName: user.first_name,

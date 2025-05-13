@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+ 
 /* eslint-disable prettier/prettier */
  
 /* eslint-disable prettier/prettier */
@@ -57,7 +57,7 @@ async changePasswordUser(
 ) {
   const {id, pwd} = pwdRequest;
   const message = await this.exampleService.changeUserPassword(id, pwd);
-  return message;
+  return {data: message};
 }
 @Post('api/checkPassword') 
 async checkPasswordUser(
@@ -65,7 +65,7 @@ async checkPasswordUser(
 ) {
   const {id, pwd} = pwdRequest;
   const message = await this.exampleService.checkUserPassword(id, pwd);
-  return message;
+  return {data: message};
 }
 
 

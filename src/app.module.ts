@@ -7,6 +7,7 @@ import { ProfilModule } from './Functions/Profil/profil.module';
 import { DeviceModule } from './Functions/Device/device.module';
 import { AuthModule } from './Functions/auth/auth.module';
 import { AidantModule } from './Functions/aidant/aidant.module';
+import { LocationModule } from './Functions/location/location.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AidantModule } from './Functions/aidant/aidant.module';
     ProfilModule,
     DeviceModule,
     AuthModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
