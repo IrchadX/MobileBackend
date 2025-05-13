@@ -23,6 +23,7 @@ type DeviceData = {
   type: string;
   state: string;
   mac_address: string;
+  battery_capacity: number;
 };
 
 @Injectable()
@@ -38,6 +39,7 @@ export class DeviceService {
           mac_address: true,
           type_id: true,
           connection_state: true,
+          battery_capacity:true,
           device_type: {  
             select: {
               type: true, 
@@ -55,6 +57,7 @@ export class DeviceService {
         type: data.device_type.type,
         state: data.connection_state ? 'Connected' : 'Deconnected',
         mac_address: data.mac_address,
+        battery_capacity : data.battery_capacity,
       };
     } catch (error) {
       console.error('Error in get DEVICE DATA:', error);
