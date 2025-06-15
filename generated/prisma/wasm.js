@@ -117,17 +117,228 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.AudioRequestScalarFieldEnum = {
+exports.Prisma.AlertScalarFieldEnum = {
   id: 'id',
-  audio: 'audio',
-  text: 'text',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  type: 'type',
+  time: 'time',
+  date: 'date',
+  zone: 'zone',
+  status: 'status',
+  level: 'level',
+  device_id: 'device_id'
+};
+
+exports.Prisma.DeviceScalarFieldEnum = {
+  id: 'id',
+  type_id: 'type_id',
+  state_type_id: 'state_type_id',
+  user_id: 'user_id',
+  mac_address: 'mac_address',
+  software_version: 'software_version',
+  date_of_service: 'date_of_service',
+  comm_state: 'comm_state',
+  connection_state: 'connection_state',
+  battery_capacity: 'battery_capacity',
+  price: 'price'
+};
+
+exports.Prisma.Device_typeScalarFieldEnum = {
+  id: 'id',
+  type: 'type'
+};
+
+exports.Prisma.Emergency_contactScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  number: 'number'
+};
+
+exports.Prisma.Env_delimiterScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  env_id: 'env_id',
+  coordinates: 'coordinates',
+  type: 'type'
+};
+
+exports.Prisma.Env_userScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  env_id: 'env_id'
+};
+
+exports.Prisma.EnvironmentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  address: 'address',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  map_id: 'map_id',
+  is_public: 'is_public',
+  surface: 'surface'
+};
+
+exports.Prisma.ExpenseScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  label: 'label',
+  amount: 'amount',
+  category: 'category',
+  description: 'description',
+  date: 'date'
+};
+
+exports.Prisma.FormatScalarFieldEnum = {
+  id: 'id',
+  format: 'format'
+};
+
+exports.Prisma.Helper_userScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  helper_id: 'helper_id',
+  state: 'state'
+};
+
+exports.Prisma.Intervention_historyScalarFieldEnum = {
+  id: 'id',
+  device_id: 'device_id',
+  maintenancier_id: 'maintenancier_id',
+  scheduled_date: 'scheduled_date',
+  completion_date: 'completion_date',
+  description: 'description',
+  status: 'status',
+  type: 'type',
+  title: 'title',
+  location: 'location'
+};
+
+exports.Prisma.LocalisationScalarFieldEnum = {
+  id: 'id',
+  longitude: 'longitude',
+  latitude: 'latitude',
+  userId: 'userId',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.MapScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  format_id: 'format_id'
+};
+
+exports.Prisma.Market_potentielScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  city: 'city',
+  potential_value: 'potential_value'
+};
+
+exports.Prisma.Panne_historyScalarFieldEnum = {
+  id: 'id',
+  alert_id: 'alert_id'
+};
+
+exports.Prisma.PoiScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  env_id: 'env_id',
+  category_id: 'category_id',
+  name: 'name',
+  description: 'description',
+  coordinates: 'coordinates',
+  image_url: 'image_url',
+  map_id: 'map_id'
+};
+
+exports.Prisma.Poi_categoryScalarFieldEnum = {
+  id: 'id',
+  category: 'category'
+};
+
+exports.Prisma.Poi_zoneScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  poi_id: 'poi_id',
+  zone_id: 'zone_id'
+};
+
+exports.Prisma.PricingScalarFieldEnum = {
+  id: 'id',
+  attribute: 'attribute',
+  price: 'price'
+};
+
+exports.Prisma.Purchase_historyScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  user_id: 'user_id',
+  device_id: 'device_id',
+  public: 'public'
+};
+
+exports.Prisma.State_typeScalarFieldEnum = {
+  id: 'id',
+  state: 'state'
+};
+
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  family_name: 'family_name',
+  first_name: 'first_name',
+  phone_number: 'phone_number',
+  password: 'password',
+  userTypeId: 'userTypeId',
+  email: 'email',
+  sex: 'sex',
+  street: 'street',
+  city: 'city',
+  birth_date: 'birth_date',
+  Identifier: 'Identifier'
+};
+
+exports.Prisma.User_typeScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  type: 'type'
+};
+
+exports.Prisma.ZoneScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  env_id: 'env_id',
+  name: 'name',
+  description: 'description',
+  type_id: 'type_id',
+  coordinates: 'coordinates',
+  updated_at: 'updated_at',
+  map_id: 'map_id',
+  zone_type: 'zone_type'
+};
+
+exports.Prisma.Zone_typeScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  type: 'type',
+  color: 'color',
+  icon: 'icon',
+  name: 'name',
+  description: 'description',
+  priority: 'priority',
+  accessible: 'accessible'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -140,9 +351,57 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.level_new = exports.$Enums.level_new = {
+  critique: 'critique',
+  modere: 'modere',
+  mineur: 'mineur'
+};
+
+exports.ExpenseCategory = exports.$Enums.ExpenseCategory = {
+  COGS: 'COGS',
+  SALARY: 'SALARY',
+  MAINTENANCE: 'MAINTENANCE',
+  UTILITIES: 'UTILITIES',
+  MARKETING: 'MARKETING',
+  OTHER: 'OTHER'
+};
+
+exports.intervention_type = exports.$Enums.intervention_type = {
+  technique: 'technique',
+  Non_technique: 'Non_technique'
+};
 
 exports.Prisma.ModelName = {
-  AudioRequest: 'AudioRequest'
+  alert: 'alert',
+  device: 'device',
+  device_type: 'device_type',
+  emergency_contact: 'emergency_contact',
+  env_delimiter: 'env_delimiter',
+  env_user: 'env_user',
+  environment: 'environment',
+  expense: 'expense',
+  format: 'format',
+  helper_user: 'helper_user',
+  intervention_history: 'intervention_history',
+  localisation: 'localisation',
+  map: 'map',
+  market_potentiel: 'market_potentiel',
+  panne_history: 'panne_history',
+  poi: 'poi',
+  poi_category: 'poi_category',
+  poi_zone: 'poi_zone',
+  pricing: 'pricing',
+  purchase_history: 'purchase_history',
+  state_type: 'state_type',
+  user: 'user',
+  user_type: 'user_type',
+  zone: 'zone',
+  zone_type: 'zone_type'
 };
 
 /**
