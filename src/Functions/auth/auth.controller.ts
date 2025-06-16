@@ -16,14 +16,14 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
-@Controller('auth')
-export class AuthController {
+@Controller('user-auth')
+export class UserAuthController {
   constructor(private authService: AuthService) {}
 
-   @Post('signup')
-    async signupUser(@Body() dto: CreateUserDto) {
-      return this.authService.signupUser(dto);
-    }
+  @Post('signup')
+  async signupUser(@Body() dto: CreateUserDto) {
+    return this.authService.signupUser(dto);
+  }
   @Post('')
   // eslint-disable-next-line @typescript-eslint/require-await
   async login(@Body() loginDto: LoginDto) {

@@ -12,7 +12,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
+import { UserAuthModule } from './Functions/auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +29,7 @@ import { AppService } from './app.service';
     LocationModule,
     AudioModule,
     MqttModule,
+    UserAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
