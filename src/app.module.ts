@@ -4,7 +4,7 @@ import { AudioModule } from './audio/audio.module';
 import { MqttModule } from './mqtt/mqtt.module';
 import { ProfilModule } from './Functions/Profil/profil.module';
 import { DeviceModule } from './Functions/Device/device.module';
-import { AuthModule } from './Functions/auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 import { AidantModule } from './Functions/aidant/aidant.module';
 import { LocationModule } from './Functions/location/location.module';
 import { AppelModule } from './Functions/appel/appel.module';
