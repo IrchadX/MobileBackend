@@ -91,9 +91,12 @@ export class AidantService {
       return { message: 'Pairing request sent successfully' };
     } catch (error) {
       console.error('Error in pairWithAidant:', error);
-      if (error instanceof Error && 
-          (error.message === 'Aidant not found' || 
-           error.message === 'User has already sent a pairing request to another helper')) {
+      if (
+        error instanceof Error &&
+        (error.message === 'Aidant not found' ||
+          error.message ===
+            'User has already sent a pairing request to another helper')
+      ) {
         throw error;
       }
       throw new Error('An error occurred while processing the pairing request');
